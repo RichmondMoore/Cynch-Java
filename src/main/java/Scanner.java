@@ -14,6 +14,28 @@ class Scanner {
     private int current = 0;
     private int line = 1;
 
+    private static final Map<String, TokenType> keywords;
+
+    static {
+        keywords = new HashMap<>();
+        keywords.put("and",         AND);
+        keywords.put("class",       CLASS);
+        keywords.put("else",        ELSE);
+        keywords.put("false",       FALSE);
+        keywords.put("for",         FOR);
+        keywords.put("fun",         FUN);
+        keywords.put("if",          IF);
+        keywords.put("nil",         NIL);
+        keywords.put("or",          OR);
+        keywords.put("print",       PRINT);
+        keywords.put("return",      RETURN);
+        keywords.put("super",       SUPER);
+        keywords.put("this",        THIS);
+        keywords.put("true",        TRUE);
+        keywords.put("var",         VAR);
+        keywords.put("while",       WHILE);
+    }
+
     Scanner(String source) {
         this.source = source;
     }
@@ -24,7 +46,7 @@ class Scanner {
             scanToken();
         }
 
-        tokens.add(new Token(EOF, "", null, line);
+        tokens.add(new Token(EOF, "", null, line));
         return tokens;
     }
 
@@ -71,15 +93,27 @@ class Scanner {
                 line++;
                 break;
             case '"': string(); break; // Strings always begin with "
+            case 'o':
+                if (match('r')) {
+                    addToken(OR);
+                }
+                break;
 
             // TODO combine multiple invalid characters errors into one error
             default:
-                Cynch.error(line, "Unexpected character.");
+                if (isDigit(c)) {
+                    number();
+                } else if (isAlpha(c)) {
+                    identifier();
+                } else {
+                    Cynch.error(line, "Unexpected character.");
+                }
                 break;
         }
     }
 
     // ***** Helper Functions ***** //
+    // TODO reorganize order of functions based on use
 
     private boolean isAtEnd() {
         return current >= source.length();
@@ -93,7 +127,6 @@ class Scanner {
         addToken(type, null);
     }
 
-    @Override
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
@@ -113,6 +146,12 @@ class Scanner {
     private char peek() {
         if (isAtEnd()) return '\0';
         return source.charAt(current);
+    }
+
+    // Two characters of lookahead
+    private char peekNext() {
+        if (current + 1 >= source.length()) return '\0';
+        return source.charAt(current + 1);
     }
 
     // Detects the entire string and checks if it is terminated
@@ -137,4 +176,40 @@ class Scanner {
         String value = source.substring(start + 1, current - 1);
         addToken(STRING, value);
     }
+
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+    private void number() {
+        while(isDigit(peek())) advance();
+
+        // Look for fractional part
+        if (peek() == '.' && isDigit(peekNext())) {
+            // Consume the '.'
+            advance();
+
+            while (isDigit(peek())) advance();
+        }
+    }
+
+    private void identifier() {
+        while (isAlphaNumeric(peek())) advance();
+
+        String text = source.substring(start, current);
+        TokenType type = keywords.get(text);
+        if (type == null) type = IDENTIFIER;
+        addToken(type);
+    }
+
+    private boolean isAlpha(char c) {
+        return (c >= 'a' && c <= 'z') ||
+               (c >= 'A' && c <= 'Z') ||
+                c == '_';
+    }
+
+    private boolean isAlphaNumeric(char c) {
+        return isAlpha(c) || isDigit(c);
+    }
+
 }
