@@ -55,21 +55,33 @@ public class Cynch {
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
 
-        // Print the tokens
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
+        // Stop if there was a syntax error
+        if (hadError) return;
+
+        System.out.println(new AstPrinter().print(expression));
     }
 
     static void error(int line, String message) {
         report(line, "", message);
     }
 
+    // Reports the given error with information
     private static void report(int line, String where, String message) {
         // Reports the location and error
         System.err.println("[line " + line + "] Error" + where + ": " + message);
         hadError = true;
+    }
+
+    // Shows the error to the user
+    static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
     }
 
 }
