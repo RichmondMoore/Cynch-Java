@@ -55,6 +55,8 @@ class Parser {
         return expr;
     }
 
+    // TODO add support for bitwise below equality()
+
     // comparison --> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
     // Works in the same way as equality()
     private Expr comparison() {
