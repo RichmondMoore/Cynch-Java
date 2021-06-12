@@ -45,8 +45,8 @@ public class Cynch {
             String line = reader.readLine();
 
             // Exit the prompt by typing CTRL-D
-            if (line == null)
-                break;
+            if (line == null) break;
+            if (line.equalsIgnoreCase("Quit")) break;
             run(line);
             hadError = false;
         }
