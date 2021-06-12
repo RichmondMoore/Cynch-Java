@@ -2,6 +2,12 @@ package main.java;
 
 import java.util.List;
 
+// Each expression type extends Expr so that each one has a Visitor
+// This also aids in debugging as an error will be thrown if trying to access
+// a field that the class does not have (ex. trying to do something with 
+// Grouping.left)
+
+// 
 abstract class Expr {
     interface Visitor<R> {
         R visitBinaryExpr(Binary expr);
@@ -9,6 +15,8 @@ abstract class Expr {
         R visitLiteralExpr(Literal expr);
         R visitUnaryExpr(Unary expr);
     }
+
+  // Operators that need two operands (ex. +, -, *, /, and logic operators)
   static class Binary extends Expr {
     Binary(Expr left, Token operator, Expr right) {
       this.left = left;
@@ -25,6 +33,8 @@ abstract class Expr {
     final Token operator;
     final Expr right;
   }
+
+  // A pair of parentheses grouping an expression
   static class Grouping extends Expr {
     Grouping(Expr expression) {
       this.expression = expression;
@@ -37,6 +47,8 @@ abstract class Expr {
 
     final Expr expression;
   }
+
+  // No operands (ex. numbers, strings, true, false)
   static class Literal extends Expr {
     Literal(Object value) {
       this.value = value;
@@ -49,6 +61,8 @@ abstract class Expr {
 
     final Object value;
   }
+
+  // One operand (ex. - or !)
   static class Unary extends Expr {
     Unary(Token operator, Expr right) {
       this.operator = operator;
@@ -64,5 +78,5 @@ abstract class Expr {
     final Expr right;
   }
 
-    abstract <R> R accept(Visitor<R> visitor);
+  abstract <R> R accept(Visitor<R> visitor);
 }
