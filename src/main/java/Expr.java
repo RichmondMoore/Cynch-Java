@@ -6,14 +6,13 @@ import java.util.List;
 // This also aids in debugging as an error will be thrown if trying to access
 // a field that the class does not have (ex. trying to do something with 
 // Grouping.left)
-
-// 
 abstract class Expr {
     interface Visitor<R> {
         R visitBinaryExpr(Binary expr);
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
         R visitUnaryExpr(Unary expr);
+        R visitVariableExpr(Variable expr);
     }
 
   // Operators that need two operands (ex. +, -, *, /, and logic operators)
@@ -77,8 +76,20 @@ abstract class Expr {
     final Token operator;
     final Expr right;
   }
+  static class Variable extends Expr {
+    Variable(Token name) {
+      this.name = name;
+    }
 
-  abstract <R> R accept(Visitor<R> visitor);
+  @Override
+  <R> R accept(Visitor<R> visitor) {
+      return visitor.visitVariableExpr(this);
+  }
+
+    final Token name;
+  }
+
+    abstract <R> R accept(Visitor<R> visitor);
 }
 
 /*
