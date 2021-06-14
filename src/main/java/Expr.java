@@ -84,15 +84,15 @@ abstract class Expr {
 /*
     Cynch Grammer:
 
-    expression     → literal
-                   | unary
-                   | binary
-                   | grouping ;
+    expression     --> literal
+                     | unary
+                     | binary
+                     | grouping ;
 
-    literal        → NUMBER | STRING | "true" | "false" | "nil" ;
-    grouping       → "(" expression ")" ;
-    unary          → ( "-" | "!" ) expression ;
-    binary         → expression operator expression ;
-    operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
-                   | "+"  | "-"  | "*" | "/" ;
+    literal        --> NUMBER | STRING | "true" | "false" | "nil" ;
+    grouping       --> "(" expression ")" ;
+    unary          --> ( "-" | "!" ) expression ;
+    binary         --> expression operator expression ;
+    operator       --> "==" | "!=" | "<" | "<=" | ">" | ">="
+                     | "+"  | "-"  | "*" | "/" ;
 */
