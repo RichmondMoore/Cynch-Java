@@ -1,4 +1,17 @@
 var a = 21;
 var b = "21";
+var c;
 
 print a + b;
+
+// Uncomment line below to see RuntimeError for uninitialized variables
+// print c;
+
+var x = "global";
+
+{
+    var x = "inner";
+    print x;
+}
+
+print x;
