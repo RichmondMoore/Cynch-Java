@@ -14,14 +14,14 @@ var x = "global";
     print x; // Expect "inner"
 }
 
-print x; // Expect "outer"
+print x; // Expect "inner"
 
 {
-    var y = "first"; // Expect 
+    var y = "first"; // Expect "first"
     print y;
 }
 
 {
-    var y = "second";
+    var y = "second"; // Expect "second"
     print y;
 }
