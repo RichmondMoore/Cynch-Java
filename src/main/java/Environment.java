@@ -17,6 +17,9 @@ class Environment {
 
     Object get(Token name) {
         if (values.containsKey(name.lexeme)) {
+            if (values.get(name.lexeme) == null) {
+                throw new RuntimeError(name, "Variable '" + name.lexeme + "' has not been initialized.");
+            }
             return values.get(name.lexeme);
         }
 
