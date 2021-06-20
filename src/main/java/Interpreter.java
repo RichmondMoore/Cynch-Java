@@ -133,7 +133,7 @@ class Interpreter implements Expr.Visitor<Object>,
         return null;
     }
 
-    void executeBlock(List<Stmt> statements, Environment environments) {
+    void executeBlock(List<Stmt> statements, Environment environment) {
         Environment previous = this.environment;
 
         try {
