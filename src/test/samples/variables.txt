@@ -2,16 +2,26 @@ var a = 21;
 var b = "21";
 var c;
 
-print a + b;
+print a + b; // Expect "2121"
 
 // Uncomment line below to see RuntimeError for uninitialized variables
-// print c;
+// print c; // Expect RuntimeError
 
 var x = "global";
 
 {
-    var x = "inner";
-    print x;
+    x = "inner";
+    print x; // Expect "inner"
 }
 
-print x;
+print x; // Expect "outer"
+
+{
+    var y = "first"; // Expect 
+    print y;
+}
+
+{
+    var y = "second";
+    print y;
+}
