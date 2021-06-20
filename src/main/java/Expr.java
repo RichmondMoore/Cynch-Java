@@ -2,16 +2,13 @@ package main.java;
 
 import java.util.List;
 
-// Each expression type extends Expr so that each one has a Visitor
-// This also aids in debugging as an error will be thrown if trying to access
-// a field that the class does not have (ex. trying to do something with 
-// Grouping.left)
 abstract class Expr {
     interface Visitor<R> {
         R visitAssignExpr(Assign expr);
         R visitBinaryExpr(Binary expr);
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
+        R visitLogicalExpr(Logical expr);
         R visitUnaryExpr(Unary expr);
         R visitVariableExpr(Variable expr);
     }
@@ -29,8 +26,6 @@ abstract class Expr {
     final Token name;
     final Expr value;
   }
-
-  // Operators that need two operands (ex. +, -, *, /, and logic operators)
   static class Binary extends Expr {
     Binary(Expr left, Token operator, Expr right) {
       this.left = left;
@@ -47,8 +42,6 @@ abstract class Expr {
     final Token operator;
     final Expr right;
   }
-
-  // A pair of parentheses grouping an expression
   static class Grouping extends Expr {
     Grouping(Expr expression) {
       this.expression = expression;
@@ -61,8 +54,6 @@ abstract class Expr {
 
     final Expr expression;
   }
-
-  // No operands (ex. numbers, strings, true, false)
   static class Literal extends Expr {
     Literal(Object value) {
       this.value = value;
@@ -75,8 +66,22 @@ abstract class Expr {
 
     final Object value;
   }
+  static class Logical extends Expr {
+    Logical(Expr left, Token operator, Expr right) {
+      this.left = left;
+      this.operator = operator;
+      this.right = right;
+    }
 
-  // One operand (ex. - or !)
+  @Override
+  <R> R accept(Visitor<R> visitor) {
+      return visitor.visitLogicalExpr(this);
+  }
+
+    final Expr left;
+    final Token operator;
+    final Expr right;
+  }
   static class Unary extends Expr {
     Unary(Token operator, Expr right) {
       this.operator = operator;
@@ -106,19 +111,3 @@ abstract class Expr {
 
     abstract <R> R accept(Visitor<R> visitor);
 }
-
-/*
-    Cynch Grammer:
-
-    expression     --> literal
-                     | unary
-                     | binary
-                     | grouping ;
-
-    literal        --> NUMBER | STRING | "true" | "false" | "nil" ;
-    grouping       --> "(" expression ")" ;
-    unary          --> ( "-" | "!" ) expression ;
-    binary         --> expression operator expression ;
-    operator       --> "==" | "!=" | "<" | "<=" | ">" | ">="
-                     | "+"  | "-"  | "*" | "/" ;
-*/
