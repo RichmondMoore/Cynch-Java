@@ -100,7 +100,6 @@ class Scanner {
                 }
                 break;
 
-            // TODO combine multiple invalid characters errors into one error
             default:
                 if (isDigit(c)) {
                     number();
@@ -114,8 +113,6 @@ class Scanner {
     }
 
     // ***** Helper Functions ***** //
-    // TODO reorganize order of functions based on use
-
     private boolean isAtEnd() {
         return current >= source.length();
     }
