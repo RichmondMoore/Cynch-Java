@@ -1,0 +1,11 @@
+// Expect: First 20 numbers in sequence to be printed
+// This code will run noticeably slower than what is expected of other languages
+
+fun fib(n) {
+  if (n <= 1) return n;
+  return fib(n - 2) + fib(n - 1);
+}
+
+for (var i = 0; i < 20; i = i + 1) {
+  print fib(i);
+}
