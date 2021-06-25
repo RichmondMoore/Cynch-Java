@@ -6,6 +6,14 @@ fun fib(n) {
   return fib(n - 2) + fib(n - 1);
 }
 
+var start = clock();
+
 for (var i = 0; i < 20; i = i + 1) {
   print fib(i);
 }
+
+var end = clock();
+
+var elapsed_time = end - start;
+
+print "Elapsed time: " + elapsed_time;
