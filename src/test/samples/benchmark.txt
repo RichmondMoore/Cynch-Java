@@ -4,5 +4,8 @@ fun fib(n) {
 }
 
 var start = clock();
-print fib(35) == 9227465;
+print fib(31) == 1346269;
 print clock() - start;
+
+// This may take several minutes to complete
+// It took me 108 seconds to calculate the 31st number
